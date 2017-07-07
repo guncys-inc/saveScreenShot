@@ -27,3 +27,7 @@ ssmaya.SaveScreenShot(r"<IMAGEPATH>")
 
 from saveScreenShot.exts import mobu as ssmobu
 ssmobu.SaveScreenShot(r"<IMAGEPATH>")
+
+# License
+
+This software is released under the MIT License
