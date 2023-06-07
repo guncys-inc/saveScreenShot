@@ -656,12 +656,15 @@ def _pyside2():
     if hasattr(Qt, "_QtUiTools"):
         Qt.QtCompat.loadUi = _loadUi
 
-    if hasattr(Qt, "_QtGui") and hasattr(Qt, "_QtCore"):
-        Qt.QtCore.QStringListModel = Qt._QtGui.QStringListModel
-
     if hasattr(Qt, "_QtWidgets"):
         Qt.QtCompat.setSectionResizeMode = \
             Qt._QtWidgets.QHeaderView.setSectionResizeMode
+
+    if hasattr(Qt, "_QtGui") and hasattr(Qt._QtGui, "QStringListModel"):
+        Qt.QtCore.QStringListModel = Qt._QtGui.QStringListModel
+
+    if hasattr(Qt, "_QtCore") and hasattr(Qt._QtCore, "QStringListModel"):
+        Qt.QtCore.QStringListModel = Qt._QtCore.QStringListModel
 
     if hasattr(Qt, "_QtCore"):
         Qt.__qt_version__ = Qt._QtCore.qVersion()
@@ -843,7 +846,7 @@ def _none():
     Qt.QtCompat.loadUi = lambda uifile, baseinstance=None: None
     Qt.QtCompat.setSectionResizeMode = lambda *args, **kwargs: None
 
-    for submodule in _common_members.keys():
+    for submodule in list(_common_members.keys()):
         setattr(Qt, submodule, Mock())
         setattr(Qt, "_" + submodule, Mock())
 
@@ -1077,7 +1080,7 @@ def _install():
         raise ImportError("No Qt binding were found.")
 
     # Install individual members
-    for name, members in _common_members.items():
+    for name, members in list(_common_members.items()):
         try:
             their_submodule = getattr(Qt, "_%s" % name)
         except AttributeError:
