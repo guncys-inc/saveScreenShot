@@ -1,10 +1,12 @@
+import os
+import sys
 from ... import util
 from ... import cropImage
 
 from maya import OpenMayaUI
 from maya import OpenMaya
 
-import os
+IS_PYTHON2 = (sys.version_info[0] == 2)
 
 
 def _saveBuffer(savePath, tmpImgExtension="bmp"):
@@ -20,11 +22,21 @@ def SaveScreenShot(outPath, tmpImgExtension="bmp"):
 
     _saveBuffer(tmp_file)
 
-    result = cropImage.CropImage.RunCropImage(tmp_file, outPath, parent=GetMayaMainWindow())
+    result = cropImage.CropImage.RunCropImage(tmp_file,
+                                              outPath,
+                                              parent=GetMayaMainWindow())
 
     os.remove(tmp_file)
 
     return (result is 1)
+
+
+def _get_main_window_pointer():
+    pointer = OpenMayaUI.MQtUtil_mainWindow()
+
+    if IS_PYTHON2:
+        return long(pointer)
+    return int(pointer)
 
 
 def GetMayaMainWindow():
@@ -36,4 +48,5 @@ def GetMayaMainWindow():
     else:
         import shiboken
 
-    return shiboken.wrapInstance(long(OpenMayaUI.MQtUtil_mainWindow()), QtWidgets.QMainWindow)
+    return shiboken.wrapInstance(_get_main_window_pointer(),
+                                 QtWidgets.QMainWindow)

@@ -1,9 +1,14 @@
+import os
+import sys
 from ... import util
 from ... import cropImage
 
-import os
-import MaxPlus
+IS_PYTHON2 = (sys.version_info[0] == 2)
 
+if IS_PYTHON2:
+    import MaxPlus
+else:
+    import pymxs
 
 CaptureCmd = '''imagepath = @"%s"
 view_size = getViewSize()
@@ -18,7 +23,10 @@ freescenebitmaps()'''
 
 
 def _saveBuffer(tmp_file):
-    MaxPlus.Core.EvalMAXScript(CaptureCmd % tmp_file)
+    if IS_PYTHON2:
+        MaxPlus.Core.EvalMAXScript(CaptureCmd % tmp_file)
+        return
+    pymxs.runtime.execute(CaptureCmd % tmp_file)
 
 
 def SaveScreenShot(outPath, tmpImgExtension="bmp"):
@@ -35,4 +43,3 @@ def SaveScreenShot(outPath, tmpImgExtension="bmp"):
     os.remove(tmp_file)
 
     return (result is 1)
-
