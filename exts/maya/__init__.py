@@ -32,7 +32,10 @@ def SaveScreenShot(outPath, tmpImgExtension="bmp"):
 
 
 def _get_main_window_pointer():
-    pointer = OpenMayaUI.MQtUtil_mainWindow()
+    if hasattr(OpenMayaUI, "MQtUtil_mainWindow"):
+        pointer = OpenMayaUI.MQtUtil_mainWindow()
+    elif hasattr(OpenMayaUI, "MQtUtil"):
+        pointer = OpenMayaUI.MQtUtil.mainWindow()
 
     if IS_PYTHON2:
         return long(pointer)
