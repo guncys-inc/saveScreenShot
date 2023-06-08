@@ -28,7 +28,7 @@ def SaveScreenShot(outPath, tmpImgExtension="bmp"):
 
     os.remove(tmp_file)
 
-    return (result is 1)
+    return (result == 1)
 
 
 def _get_main_window_pointer():

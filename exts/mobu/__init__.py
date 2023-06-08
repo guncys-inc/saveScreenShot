@@ -44,7 +44,7 @@ def SaveScreenShot(outPath, tmpImgExtension="tif"):
     os.remove(tmp_file)
     os.remove(tmp_bmp)
 
-    return (result is 1)
+    return (result == 1)
 
 
 def GetMayaMainWindow():

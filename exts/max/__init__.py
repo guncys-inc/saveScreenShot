@@ -42,4 +42,4 @@ def SaveScreenShot(outPath, tmpImgExtension="bmp"):
     # remove temp file
     os.remove(tmp_file)
 
-    return (result is 1)
+    return (result == 1)
